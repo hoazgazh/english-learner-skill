@@ -153,9 +153,13 @@ function summary() {
   return { total: items.length, due_now: due, new: newCount, learning, review, relearning, mature };
 }
 
+// --- Exports for testing ---
+module.exports = { getAllItems, generateQuiz, gradeCard, reviewList, summary, DATA_ROOT, WORDS_DIR, PHRASES_DIR };
+
 // --- CLI ---
-const [cmd, ...args] = process.argv.slice(2);
-switch (cmd) {
+if (require.main === module) {
+  const [cmd, ...args] = process.argv.slice(2);
+  switch (cmd) {
   case 'generate':
     console.log(JSON.stringify(generateQuiz(
       args[0] ? parseInt(args[0]) : 10,
@@ -174,4 +178,5 @@ switch (cmd) {
   default:
     console.log('Commands: generate [count] [due|new|hard|random], grade <word> <again|hard|good|easy>, review [limit], summary');
     process.exit(1);
+  }
 }

@@ -38,6 +38,9 @@ function getWord(word) {
 }
 
 function saveWord(entry) {
+  if (!entry || !entry.word || typeof entry.word !== 'string') {
+    return { error: 'invalid_entry', message: 'word field is required' };
+  }
   const fp = wordFile(entry.word);
   const data = loadJson(fp);
   const key = entry.word.toLowerCase();
@@ -77,6 +80,9 @@ function getPhrase(phrase) {
 }
 
 function savePhrase(entry) {
+  if (!entry || !entry.phrase || typeof entry.phrase !== 'string') {
+    return { error: 'invalid_entry', message: 'phrase field is required' };
+  }
   const fp = phraseFile(entry.phrase);
   const data = loadJson(fp);
   const key = entry.phrase.toLowerCase();
@@ -168,37 +174,49 @@ function logQuery(query, type) {
   saveJson(fp, data);
 }
 
+// --- Exports for testing ---
+module.exports = { ensureDirs, getWord, saveWord, updateFsrs, getPhrase, savePhrase, batchGet, batchSave, getAllWords, getAllPhrases, stats, logQuery, DATA_ROOT, WORDS_DIR, PHRASES_DIR, HISTORY_DIR };
+
 // --- CLI ---
-function main() {
+if (require.main === module) {
   ensureDirs();
   const [cmd, ...args] = process.argv.slice(2);
 
+  function tryParseJSON(str, label) {
+    try { return JSON.parse(str); }
+    catch { console.log(JSON.stringify({ error: 'invalid_json', field: label })); process.exit(1); }
+  }
+
   switch (cmd) {
     case 'get_word':
+      if (!args[0]) { console.log(JSON.stringify({ error: 'missing_word' })); process.exit(1); }
       console.log(JSON.stringify(getWord(args[0])));
       break;
     case 'save_word':
-      console.log(JSON.stringify(saveWord(JSON.parse(args[0]))));
+      console.log(JSON.stringify(saveWord(tryParseJSON(args[0], 'word_json'))));
       break;
     case 'update_fsrs':
-      console.log(JSON.stringify(updateFsrs(args[0], JSON.parse(args[1]), args[2] ? JSON.parse(args[2]) : null)));
+      if (!args[0]) { console.log(JSON.stringify({ error: 'missing_word' })); process.exit(1); }
+      console.log(JSON.stringify(updateFsrs(args[0], tryParseJSON(args[1], 'fsrs_json'), args[2] ? tryParseJSON(args[2], 'log_json') : null)));
       break;
     case 'get_phrase':
+      if (!args[0]) { console.log(JSON.stringify({ error: 'missing_phrase' })); process.exit(1); }
       console.log(JSON.stringify(getPhrase(args[0])));
       break;
     case 'save_phrase':
-      console.log(JSON.stringify(savePhrase(JSON.parse(args[0]))));
+      console.log(JSON.stringify(savePhrase(tryParseJSON(args[0], 'phrase_json'))));
       break;
     case 'batch_get':
-      console.log(JSON.stringify(batchGet(JSON.parse(args[0]))));
+      console.log(JSON.stringify(batchGet(tryParseJSON(args[0], 'words_array'))));
       break;
     case 'batch_save':
-      console.log(JSON.stringify(batchSave(JSON.parse(args[0]))));
+      console.log(JSON.stringify(batchSave(tryParseJSON(args[0], 'entries_array'))));
       break;
     case 'stats':
       console.log(JSON.stringify(stats(), null, 2));
       break;
     case 'log_query':
+      if (!args[0]) { console.log(JSON.stringify({ error: 'missing_query' })); process.exit(1); }
       logQuery(args[0], args[1] || 'word');
       console.log('{"ok":true}');
       break;
@@ -213,5 +231,3 @@ function main() {
       process.exit(1);
   }
 }
-
-main();

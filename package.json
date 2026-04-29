@@ -1,0 +1,33 @@
+{
+  "name": "english-learner-skill",
+  "version": "4.0.0",
+  "description": "AI agent skill for vocabulary learning with FSRS spaced repetition — learn English while you code",
+  "keywords": [
+    "agent-skills",
+    "spaced-repetition",
+    "fsrs",
+    "vocabulary",
+    "english-learning",
+    "anki",
+    "ai-agent",
+    "kiro",
+    "claude-code",
+    "copilot"
+  ],
+  "author": "hoazgazh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoazgazh/english-learner-skill.git"
+  },
+  "homepage": "https://github.com/hoazgazh/english-learner-skill",
+  "bugs": {
+    "url": "https://github.com/hoazgazh/english-learner-skill/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "cd english-learner/scripts && npm test"
+  }
+}

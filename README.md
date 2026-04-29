@@ -3,6 +3,7 @@
 > Turn your AI coding agent into a personal English tutor — with Anki-grade spaced repetition built in.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/hoazgazh/english-learner-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/hoazgazh/english-learner-skill/actions/workflows/ci.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-≥18-green.svg)](https://nodejs.org)
 [![FSRS](https://img.shields.io/badge/FSRS-Anki_23.10+-purple.svg)](https://github.com/open-spaced-repetition/ts-fsrs)
 [![Skills](https://img.shields.io/badge/npx_skills-compatible-orange.svg)](https://skills.sh)
